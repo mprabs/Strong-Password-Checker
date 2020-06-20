@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div class="content">
+      <h1> STRONG PASSWORD CHECKER </h1> <hr />
+      <p> Check if your password is strong or not !! </p>
+      <input type="password" id="userInput" placeholder="Enter the password" oninput="strongPasswordChecker()"" />
+      <p id="errorMessage"></p>
+    </div>
+  </body>
+
+  <style>
+    .content {
+      margin-top: auto;
+      margin-bottom: auto;
+      text-align: center;
+    }
+
+    #errorMessage {
+      color: brown;
+    }
+  </style>
+
+  <script>
+    var input = document.getElementById("userInput");
+
+    function strongPasswordChecker() {
+      //check password length
+      if (input.value.length >= 8 && input.value.length <= 15) {
+        var arrayofInput = [];
+        arrayofInput = input.value.split("");
+
+        var errors = {
+          digit: true,
+          lowCase: true,
+          upCase: true,
+          repeat: true,
+        };
+
+        for (let i = 0; i < input.value.length; i++) {
+          //check if the password has a number
+          if (errors.digit && !isNaN(arrayofInput[i])) errors.digit = false
+          // check if the password has a lowerCase character
+          if (errors.lowCase && arrayofInput[i].toLowerCase() === arrayofInput[i] && isNaN(arrayofInput[i])) errors.lowCase = false;
+          // check if the password as an uppercase character
+          if (errors.upCase && arrayofInput[i].toUpperCase() === arrayofInput[i] && isNaN(arrayofInput[i])) errors.upCase = false;
+          // check if the password has repeatitive characters
+          if (errors.repeat && arrayofInput[i - 2] === arrayofInput[i - 1] && arrayofInput[i - 1] === arrayofInput[i]) errors.repeat = false;
+        }
+
+        if (errors.repeat === false) showMessage("Can't repeat 3 letters simultaneously i.e. (...aaa...) is prohibited")
+        else if (errors.digit || errors.lowCase || errors.upCase) showMessage("Recheck ! Requires 1 upper case letter, 1 lower case letter & 1 digit")
+        else if (errors.repeat) showMessage("Strong Password !!")
+      }
+      else showMessage("Word Length must be between 8 to 15")
+    }
+
+    // display error messages
+    function showMessage (message) {
+      document.getElementById("errorMessage").innerHTML = message;
+    }
+  </script>
+
+</html>
